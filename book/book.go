@@ -40,11 +40,13 @@ func DeleteBook(c *fiber.Ctx) error {
 	var book Book
 	db.First(&book, id)
 	if book.Title == "" {
-		c.Status(500).Send("No Book Found with ID")
-		return
+		return c.JSON(fiber.Map{
+			"status":  false,
+			"message": "No Book Found with ID",
+		})
 	}
 	db.Delete(&book)
-	return c.JSON(&fiber.Map{"message": "Book Successfully deleted"})
+	return c.JSON(fiber.Map{"message": "Book Successfully deleted"})
 }
 
 type Book struct {
